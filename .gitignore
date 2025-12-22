@@ -9,3 +9,4 @@ venv
 media
 static
 .idea
+backend/.env

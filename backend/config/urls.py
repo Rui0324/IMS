@@ -6,7 +6,7 @@ from apps.accounts.views import AuthViewSet, UserAdminViewSet
 from apps.students.views import StudentViewSet
 from apps.projects.views import ProjectViewSet
 from apps.scores.views import ScoreViewSet
-from apps.messages.views import MessageViewSet
+from apps.site_messages.views import MessageViewSet
 from apps.auditlog.views import AuditLogViewSet, StatsView
 from apps.ai.views import AIViewSet
 

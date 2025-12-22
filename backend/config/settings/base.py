@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     'apps.students',
     'apps.projects',
     'apps.scores',
-    'apps.messages',
+    'apps.site_messages',
     'apps.auditlog',
     'apps.ai',
 ]
