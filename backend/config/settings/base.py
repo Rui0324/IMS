@@ -44,7 +44,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'apps.auditlog.middleware.AuditLogMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -68,16 +67,17 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': env('DATABASE_NAME', default='ims'),
-        'USER': env('DATABASE_USER', default='root'),
-        'PASSWORD': env('DATABASE_PASSWORD', default=''),
-        'HOST': env('DATABASE_HOST', default='localhost'),
-        'PORT': env('DATABASE_PORT', default='3306'),
-        'OPTIONS': {'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"},
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": os.getenv("DB_NAME", os.getenv("MYSQL_DATABASE", "ims")),
+        "USER": os.getenv("DB_USER", os.getenv("MYSQL_USER", "root")),
+        "PASSWORD": os.getenv("DB_PASSWORD", os.getenv("MYSQL_PASSWORD", "pass")),
+        "HOST": os.getenv("DB_HOST", os.getenv("MYSQL_HOST", "mysql")),
+        "PORT": os.getenv("DB_PORT", os.getenv("MYSQL_PORT", "3306")),
+        "OPTIONS": {"charset": "utf8mb4"},
     }
 }
+
 
 AUTH_USER_MODEL = 'accounts.User'
 

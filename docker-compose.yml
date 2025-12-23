@@ -26,5 +26,14 @@ services:
     depends_on:
       - mysql
       - redis
+  web:
+    build: ./frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
 volumes:
   db_data:
+
