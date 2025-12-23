@@ -1,0 +1,15 @@
+Django>=5.0,<6.0
+djangorestframework
+djangorestframework-simplejwt
+django-cors-headers
+mysqlclient
+redis
+langchain
+faiss-cpu
+python-dotenv
+pytest
+django-environ
+Pillow
+ruff
+black
+isort
