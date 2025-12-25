@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.response import Response
 
+from config.api import ApiResponseMixin, api_response
 from .serializers import LoginSerializer, RefreshSerializer, RegisterSerializer, UserSerializer
 
 User = get_user_model()
@@ -19,27 +19,29 @@ class AuthViewSet(viewsets.ViewSet):
     def register(self, request):
         # 仅管理员可创建，若系统无用户可用于初始化
         if User.objects.exists() and not (request.user.is_authenticated and request.user.role == User.Roles.ADMIN):
-            return Response({'detail': 'forbidden'}, status=status.HTTP_403_FORBIDDEN)
+            return api_response(None, msg='forbidden', code=1003, status_code=status.HTTP_403_FORBIDDEN)
         serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
+        return api_response(UserSerializer(user).data, status_code=status.HTTP_201_CREATED)
 
     def login(self, request):
         serializer = LoginSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        return Response(serializer.validated_data)
+        if not serializer.is_valid():
+            return api_response(None, msg='Invalid username or password', code=1002, status_code=status.HTTP_401_UNAUTHORIZED)
+        return api_response(serializer.validated_data)
 
     def refresh(self, request):
         serializer = RefreshSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        return Response(serializer.validated_data)
+        if not serializer.is_valid():
+            return api_response(None, msg='Invalid refresh token', code=1002, status_code=status.HTTP_401_UNAUTHORIZED)
+        return api_response(serializer.validated_data)
 
     def me(self, request):
-        return Response(UserSerializer(request.user).data)
+        return api_response(UserSerializer(request.user).data)
 
 
-class UserAdminViewSet(viewsets.ModelViewSet):
+class UserAdminViewSet(ApiResponseMixin, viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAdmin]
@@ -59,7 +61,7 @@ class UserAdminViewSet(viewsets.ModelViewSet):
         user = self.get_object()
         role = request.data.get('role')
         if role not in dict(User.Roles.choices):
-            return Response({'detail': 'invalid role'}, status=status.HTTP_400_BAD_REQUEST)
+            return api_response(None, msg='invalid role', code=1001, status_code=status.HTTP_400_BAD_REQUEST)
         user.role = role
         user.save()
-        return Response(UserSerializer(user).data)
+        return api_response(UserSerializer(user).data)

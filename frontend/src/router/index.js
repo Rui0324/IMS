@@ -8,6 +8,7 @@ import Profile from '../views/student/Profile.vue'
 import ProjectSubmit from '../views/student/ProjectSubmit.vue'
 import Achievements from '../views/student/Achievements.vue'
 import AIRecommend from '../views/student/AIRecommend.vue'
+import StudentScores from '../views/student/Scores.vue'
 import ReviewScores from '../views/teacher/ReviewScores.vue'
 import AIQA from '../views/teacher/AIQA.vue'
 import UserManage from '../views/admin/UserManage.vue'
@@ -24,6 +25,7 @@ const routes = [
       { path: '', component: Profile },
       { path: 'project', component: ProjectSubmit },
       { path: 'achievements', component: Achievements },
+      { path: 'scores', component: StudentScores },
       { path: 'ai', component: AIRecommend }
     ]
   },

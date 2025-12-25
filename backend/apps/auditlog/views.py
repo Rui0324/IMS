@@ -3,15 +3,15 @@ from datetime import timedelta
 from django.db.models import Count
 from django.utils import timezone
 from rest_framework import viewsets
-from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from config.api import ApiResponseMixin, api_response
 from apps.accounts.views import IsAdmin
 from .models import Log
 from .serializers import LogSerializer
 
 
-class AuditLogViewSet(viewsets.ReadOnlyModelViewSet):
+class AuditLogViewSet(ApiResponseMixin, viewsets.ReadOnlyModelViewSet):
     queryset = Log.objects.all().order_by('-created_at')
     serializer_class = LogSerializer
     permission_classes = [IsAdmin]
@@ -50,4 +50,4 @@ class StatsView(APIView):
             'approved_rate': Score.objects.filter(status='approved').count(),
             'trend': list(trend),
         }
-        return Response(data)
+        return api_response(data)

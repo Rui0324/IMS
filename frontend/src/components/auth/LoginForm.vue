@@ -88,7 +88,7 @@ const handleSubmit = () => {
       persistRemembered()
       emit('success', auth.user)
     } catch (error) {
-      const message = error?.response?.data?.detail || '登录失败，请检查用户名或密码'
+      const message = error?.response?.data?.msg || error?.message || '登录失败，请检查用户名或密码'
       ElMessage.error(message)
     } finally {
       loading.value = false

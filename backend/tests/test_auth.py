@@ -11,7 +11,9 @@ def test_login_flow(client):
     resp = client.post('/api/auth/login', {'username': 'admin', 'password': 'pass123'}, format='json')
     assert resp.status_code == 200
     data = resp.json()
-    assert 'access' in data
+    assert data['code'] == 0
+    assert 'access' in data['data']
+    assert data['data']['user']['role'] == 'admin'
 
 
 @pytest.mark.django_db
